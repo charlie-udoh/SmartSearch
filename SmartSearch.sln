@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.30104.148
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SmartSearch.Web", "SmartSearch.Web\SmartSearch.Web.csproj", "{F45BBE5F-1D9B-49C0-9931-B17933D09416}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SmartSearch.Core", "SmartSearch.Core\SmartSearch.Core.csproj", "{97144806-9702-4CEA-BBAC-773769CEFBA5}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{F45BBE5F-1D9B-49C0-9931-B17933D09416}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F45BBE5F-1D9B-49C0-9931-B17933D09416}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F45BBE5F-1D9B-49C0-9931-B17933D09416}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F45BBE5F-1D9B-49C0-9931-B17933D09416}.Release|Any CPU.Build.0 = Release|Any CPU
+		{97144806-9702-4CEA-BBAC-773769CEFBA5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{97144806-9702-4CEA-BBAC-773769CEFBA5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{97144806-9702-4CEA-BBAC-773769CEFBA5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{97144806-9702-4CEA-BBAC-773769CEFBA5}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {D9FC9970-3CAF-405A-8DDE-167F9F7078FC}
+	EndGlobalSection
+EndGlobal

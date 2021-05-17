@@ -100,8 +100,6 @@ namespace SmartSearch.Core.Services
                         )
                     )
                 );
-                if (!createPropResponse.IsValid)
-                    Console.WriteLine("Couldn't create");
             }
 
             if (!client.Indices.Exists("management").Exists)
@@ -138,8 +136,6 @@ namespace SmartSearch.Core.Services
                         )
                     )
                 );
-                if (!createMgmtResponse.IsValid)
-                    Console.WriteLine("Couldn't create");
             }
         }
 

@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using SmartSearch.Core.DTOs;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace SmartSearch.Core.Interfaces
@@ -7,7 +8,7 @@ namespace SmartSearch.Core.Interfaces
     {
         Task<object> SearchData(string query, List<string> market, int limit, int skip);
 
-        Task<bool> SaveData(string filePath, string documentType);
+        Task<DataServiceResponse> SaveData(string filePath, string documentType);
 
         string[] GetAllowedDocumentTypes();
     }

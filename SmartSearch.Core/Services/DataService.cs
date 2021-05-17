@@ -64,7 +64,7 @@ namespace SmartSearch.Core.Services
             return searchResponse.Documents;
         }
 
-        public async Task<bool> SaveData(string filePath, string documentType)
+        public async Task<DataServiceResponse> SaveData(string filePath, string documentType)
         {
             var jsonString = File.ReadAllText(filePath);
             switch (documentType)
@@ -72,16 +72,20 @@ namespace SmartSearch.Core.Services
                 case "property":
                     var properties = JsonConvert.DeserializeObject<List<PropertyIndex>>(jsonString);
                     var propResp = await _searchClient.Client.IndexManyAsync(properties, documentType);
+                    if (!propResp.IsValid)
+                        return new DataServiceResponse { Successful = false, Message = "Unable to index Properties data" };
                     break;
                 case "management":
                     var managements = JsonConvert.DeserializeObject<List<ManagementIndex>>(jsonString);
                     var mgmtResp = await _searchClient.Client.IndexManyAsync(managements, documentType);
+                    if (!mgmtResp.IsValid)
+                        return new DataServiceResponse { Successful = false, Message = "Unable to index Management data" };
                     break;
                 default:
-                    return false;
+                    return new DataServiceResponse { Successful = false, Message = "Document Type is invalid" };
             }
             await _searchClient.Client.Indices.RefreshAsync(documentType);
-            return true;
+            return new DataServiceResponse { Successful = true, Message = "Indexed successfully" };
         }
 
         public string[] GetAllowedDocumentTypes()

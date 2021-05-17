@@ -1,8 +1,10 @@
 ﻿using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 using SmartSearch.Core.Interfaces;
 using SmartSearch.Web;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -16,18 +18,29 @@ namespace Smartdata.Web.Controllers
     {
         private readonly IDataService _dataService;
         private readonly IWebHostEnvironment _webHostEnvironment;
+        private readonly ILogger _logger;
 
-        public DataController(IDataService dataService, IWebHostEnvironment webHostEnvironment)
+        public DataController(IDataService dataService, IWebHostEnvironment webHostEnvironment, ILogger<DataController> logger)
         {
             _dataService = dataService;
             _webHostEnvironment = webHostEnvironment;
+            _logger = logger;
         }
 
         // GET: api/data/search
         [HttpGet("search")]
         public async Task<IActionResult> Get([FromQuery]string searchPhrase, [FromQuery] List<string> market, [FromQuery] int skip = 1, [FromQuery] int limit = 25)
         {
-            return Ok(await _dataService.SearchData(searchPhrase, market, limit, skip));
+            try
+            {
+                return Ok(await _dataService.SearchData(searchPhrase, market, limit, skip));
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"An error has occurred::: {ex}");
+                return StatusCode(500, "Internal Server Error");
+            }
+
         }
 
         // POST: api/data
@@ -47,11 +60,20 @@ namespace Smartdata.Web.Controllers
             {
                 return BadRequest("Document Type is not known");
             }
-            var savedFile = await Helper.SaveFile(file, "Documents", _webHostEnvironment);
-            var result = await _dataService.SaveData(savedFile, documentType);
-            if (!result)
-                return StatusCode(500, "Upload Failed");
-            return Ok("Successful");
+            try
+            {
+                var savedFile = await Helper.SaveFile(file, "Documents", _webHostEnvironment);
+                var result = await _dataService.SaveData(savedFile, documentType);
+                if (!result.Successful)
+                    return StatusCode(500, result.Message);
+                return Ok(result.Message);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"An error has occurred::: {ex}");
+                return StatusCode(500, "Internal Server Error");
+            }
+
         }
     }
 }

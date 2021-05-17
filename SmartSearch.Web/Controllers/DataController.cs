@@ -29,11 +29,11 @@ namespace Smartdata.Web.Controllers
 
         // GET: api/data/search
         [HttpGet("search")]
-        public async Task<IActionResult> Get([FromQuery]string searchPhrase, [FromQuery] List<string> market, [FromQuery] int skip = 1, [FromQuery] int limit = 25)
+        public async Task<IActionResult> Get([FromQuery]string searchPhrase, [FromQuery] List<string> market, [FromQuery] int limit = 25)
         {
             try
             {
-                return Ok(await _dataService.SearchData(searchPhrase, market, limit, skip));
+                return Ok(await _dataService.SearchData(searchPhrase, market, limit));
             }
             catch (Exception ex)
             {

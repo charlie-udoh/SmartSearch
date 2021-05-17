@@ -49,6 +49,15 @@ namespace SmartSearch.Core.Services
             if (!client.Indices.Exists("property").Exists)
             {
                 var createPropResponse = client.Indices.Create("property", i => i
+                    .Settings(s => s
+                        .Analysis(a => a
+                            .Analyzers(aa => aa
+                                .Standard("standard_eng", sa => sa
+                                    .StopWords("_english_")
+                                )
+                            )
+                        )
+                    )
                     .Map<Property>(m => m
                         .AutoMap()
                         .Properties(ps => ps
@@ -58,30 +67,30 @@ namespace SmartSearch.Core.Services
                             )
                             .Text(s => s
                                 .Name(np => np.name)
-                                .Analyzer("standard")
+                                .Analyzer("standard_eng")
                             )
                             .Text(s => s
                                 .Name(np => np.formerName)
-                                .Analyzer("standard")
+                                .Analyzer("standard_eng")
                             )
                             .Text(s => s
                                 .Name(np => np.streetAddress)
-                                .Analyzer("standard")
+                                .Analyzer("standard_eng")
                             )
                             .Text(s => s
                                 .Name(np => np.city)
-                                .Analyzer("standard")
+                                .Analyzer("standard_eng")
                             )
                             .Text(s => s
                                 .Name(np => np.state)
-                                .Analyzer("standard")
+                                .Analyzer("standard_eng")
                             )
                             .Text(c => c
                                 .Name(np => np.market)
                                 .Fields(ff => ff
                                     .Text(tt => tt
                                         .Name(np => np.market)
-                                        .Analyzer("standard")
+                                        .Analyzer("standard_eng")
                                     )
                                     .Keyword(k => k
                                         .Name("keyword")
@@ -105,6 +114,15 @@ namespace SmartSearch.Core.Services
             if (!client.Indices.Exists("management").Exists)
             {
                 var createMgmtResponse = client.Indices.Create("management", i => i
+                    .Settings(s => s
+                        .Analysis(a => a
+                            .Analyzers(aa => aa
+                                .Standard("standard_eng", sa => sa
+                                    .StopWords("_english_")
+                                )
+                            )
+                        )
+                    )
                     .Map<Management>(map => map
                         .AutoMap()
                         .Properties(ps => ps
@@ -114,18 +132,18 @@ namespace SmartSearch.Core.Services
                             )
                             .Text(s => s
                                 .Name(np => np.name)
-                                .Analyzer("standard")
+                                .Analyzer("standard_eng")
                             )
                             .Text(s => s
                                 .Name(np => np.state)
-                                .Analyzer("standard")
+                                .Analyzer("standard_eng")
                             )
                             .Text(c => c
                                 .Name(np => np.market)
                                 .Fields(ff => ff
                                     .Text(tt => tt
                                         .Name(np => np.market)
-                                        .Analyzer("standard")
+                                        .Analyzer("standard_eng")
                                     )
                                     .Keyword(k => k
                                         .Name("keyword")

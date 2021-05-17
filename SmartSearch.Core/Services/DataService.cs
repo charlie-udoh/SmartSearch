@@ -20,27 +20,27 @@ namespace SmartSearch.Core.Services
             _searchClient = searchClient;
         }
 
-        public async Task<object> SearchData(string query, List<string> market, int limit, int skip)
+        public async Task<object> SearchData(string query, List<string> market, int limit)
         {
             var propertyfilters = new List<Func<QueryContainerDescriptor<object>, QueryContainer>>();
             var managementFilters = new List<Func<QueryContainerDescriptor<object>, QueryContainer>>();
             if (market.Any())
             {
-                propertyfilters.Add(fq => fq.Terms(t => t.Field("property.market.keyword").Terms(market)));
-                managementFilters.Add(fq => fq.Terms(t => t.Field("mgmt.market.keyword").Terms(market)));
+                propertyfilters.Add(pf => pf.Terms(t => t.Field("property.market.keyword").Terms(market)));
+                managementFilters.Add(mf => mf.Terms(t => t.Field("mgmt.market.keyword").Terms(market)));
             }
 
             var searchResponse = await _searchClient.Client.SearchAsync<object>(s => s
-                .Index(Indices.Index(typeof(Property)).And(typeof(Management)))
+                .Index("property, management")
                 .Query(q => q
                     .MultiMatch(m => m
                         .Fields(f => f
-                            .Field(Infer.Field<PropertyIndex>(ff => ff.property.city))
-                            .Field(Infer.Field<PropertyIndex>(ff => ff.property.formerName))
-                            .Field(Infer.Field<PropertyIndex>(ff => ff.property.market))
-                            .Field(Infer.Field<PropertyIndex>(ff => ff.property.name))
-                            .Field(Infer.Field<PropertyIndex>(ff => ff.property.state))
-                            .Field(Infer.Field<PropertyIndex>(ff => ff.property.streetAddress))
+                            .Field(Infer.Field<PropertyIndex>(p => p.property.city))
+                            .Field(Infer.Field<PropertyIndex>(p => p.property.formerName))
+                            .Field(Infer.Field<PropertyIndex>(p => p.property.market))
+                            .Field(Infer.Field<PropertyIndex>(p => p.property.name))
+                            .Field(Infer.Field<PropertyIndex>(p => p.property.state))
+                            .Field(Infer.Field<PropertyIndex>(p => p.property.streetAddress))
                         )
                         .Operator(Operator.Or)
                         .Query(query)
@@ -49,15 +49,14 @@ namespace SmartSearch.Core.Services
                     q
                     .MultiMatch(m => m
                         .Fields(f => f
-                            .Field(Infer.Field<ManagementIndex>(ff => ff.mgmt.market))
-                            .Field(Infer.Field<ManagementIndex>(ff => ff.mgmt.name))
-                            .Field(Infer.Field<ManagementIndex>(ff => ff.mgmt.state))
+                            .Field(Infer.Field<ManagementIndex>(a => a.mgmt.market))
+                            .Field(Infer.Field<ManagementIndex>(a => a.mgmt.name))
+                            .Field(Infer.Field<ManagementIndex>(a => a.mgmt.state))
                         )
                         .Operator(Operator.Or)
                         .Query(query)
                     ) && +q.Bool(bq => bq.Filter(managementFilters))
                 )
-                .From((skip - 1) * limit)
                 .Size(limit)
             );
 
